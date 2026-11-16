@@ -1,0 +1,20 @@
+id: swagger-api-docs
+info:
+  name: Swagger / OpenAPI docs exposed
+  severity: low
+  description: API documentation is publicly reachable, handing attackers the full endpoint map.
+  tags: [api, exposure, docs]
+requests:
+  - method: GET
+    path:
+      - "/swagger-ui.html"
+      - "/swagger-ui/"
+      - "/v2/api-docs"
+      - "/openapi.json"
+      - "/api-docs"
+    matchers:
+      - type: status
+        status: [200]
+      - type: word
+        words: ["swagger", "openapi", "Swagger UI"]
+        condition: or

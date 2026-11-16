@@ -1,0 +1,15 @@
+id: svn-entries-exposure
+info:
+  name: Exposed .svn metadata
+  severity: high
+  description: The .svn directory is web-accessible, allowing source code reconstruction.
+  tags: [svn, exposure, source]
+requests:
+  - method: GET
+    path:
+      - "/.svn/entries"
+      - "/.svn/wc.db"
+    redirects: false
+    matchers:
+      - type: status
+        status: [200]

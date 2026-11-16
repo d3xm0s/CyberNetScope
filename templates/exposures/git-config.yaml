@@ -1,0 +1,17 @@
+id: git-config-exposure
+info:
+  name: Exposed .git config
+  severity: high
+  description: The .git directory is web-accessible. The full source tree can be reconstructed from it.
+  tags: [git, exposure, source]
+requests:
+  - method: GET
+    path:
+      - "/.git/config"
+    redirects: false
+    matchers:
+      - type: status
+        status: [200]
+      - type: word
+        words: ["[core]", "repositoryformatversion"]
+        condition: and

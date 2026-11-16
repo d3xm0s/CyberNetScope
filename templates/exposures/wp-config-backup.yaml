@@ -1,0 +1,20 @@
+id: wp-config-backup
+info:
+  name: WordPress wp-config backup exposed
+  severity: critical
+  description: A wp-config backup is downloadable. It holds the database password and auth keys in cleartext.
+  tags: [wordpress, exposure, secrets]
+requests:
+  - method: GET
+    path:
+      - "/wp-config.php.bak"
+      - "/wp-config.php.swp"
+      - "/wp-config.txt"
+      - "/wp-config.php~"
+    redirects: false
+    matchers:
+      - type: status
+        status: [200]
+      - type: word
+        words: ["DB_PASSWORD", "DB_NAME"]
+        condition: and

@@ -1,0 +1,22 @@
+id: cors-wildcard-reflection
+info:
+  name: CORS wildcard or origin reflection
+  severity: medium
+  description: The server reflects an arbitrary Origin or answers *, letting any site read authenticated responses cross-origin.
+  tags: [cors, misconfig]
+requests:
+  - method: GET
+    path:
+      - "/"
+    headers:
+      Origin: "https://cybernetscope-probe.example"
+    redirects: false
+    matchers:
+      - type: regex
+        part: header
+        regex: ["(?i)access-control-allow-origin:\\s*(\\*|https://cybernetscope-probe\\.example)\\b"]
+    extractors:
+      - type: regex
+        part: header
+        regex: ["(?i)access-control-allow-origin:\\s*(\\S+)"]
+        group: 1

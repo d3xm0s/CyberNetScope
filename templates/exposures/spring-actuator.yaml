@@ -1,0 +1,22 @@
+id: spring-actuator-exposure
+info:
+  name: Spring Boot Actuator exposed
+  severity: high
+  description: Actuator endpoints are reachable without auth. env/heapdump leak configuration, secrets and memory.
+  tags: [spring, java, exposure, misconfig]
+requests:
+  - method: GET
+    path:
+      - "/actuator/env"
+      - "/actuator/health"
+      - "/actuator"
+    redirects: false
+    matchers:
+      - type: status
+        status: [200]
+      - type: word
+        words: ["propertySources", "\"status\"", "_links"]
+        condition: or
+    extractors:
+      - type: regex
+        regex: ["\"(password|secret|token|key)\"\\s*:"]

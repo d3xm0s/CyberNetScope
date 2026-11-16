@@ -1,0 +1,17 @@
+id: spring-heapdump-exposure
+info:
+  name: Spring Boot heapdump downloadable
+  severity: critical
+  description: /actuator/heapdump serves a full JVM heap dump. Session tokens and credentials can be carved out of it.
+  tags: [spring, java, exposure, memory]
+requests:
+  - method: GET
+    path:
+      - "/actuator/heapdump"
+    redirects: false
+    matchers:
+      - type: status
+        status: [200]
+      - type: word
+        words: ["JAVA PROFILE 1.0"]
+        part: body

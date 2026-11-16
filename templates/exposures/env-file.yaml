@@ -1,0 +1,21 @@
+id: env-file-exposure
+info:
+  name: Exposed .env file
+  severity: critical
+  description: A .env file is web-accessible. These routinely hold database credentials, API keys and app secrets.
+  tags: [env, exposure, secrets]
+requests:
+  - method: GET
+    path:
+      - "/.env"
+      - "/.env.prod"
+      - "/.env.production"
+    redirects: false
+    matchers:
+      - type: status
+        status: [200]
+      - type: regex
+        regex: ["(?i)(APP_KEY|DB_PASSWORD|AWS_SECRET|API_KEY|SECRET|TOKEN|PASSWORD)="]
+    extractors:
+      - type: regex
+        regex: ["(?i)(APP_KEY|DB_PASSWORD|AWS_SECRET[A-Z_]*|API_KEY)\\s*="]

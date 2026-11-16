@@ -1,0 +1,21 @@
+id: grafana-unauthenticated
+info:
+  name: Grafana instance reachable
+  severity: low
+  description: A Grafana API answers anonymously. Follow up on /api/dashboards and default credentials.
+  tags: [grafana, monitoring, panel]
+requests:
+  - method: GET
+    path:
+      - "/api/health"
+    redirects: false
+    matchers:
+      - type: status
+        status: [200]
+      - type: word
+        words: ["\"database\"", "\"commit\""]
+        condition: and
+    extractors:
+      - type: regex
+        regex: ["\"version\"\\s*:\\s*\"([^\"]+)\""]
+        group: 1

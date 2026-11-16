@@ -1,0 +1,17 @@
+id: apache-server-status
+info:
+  name: Apache server-status exposed
+  severity: medium
+  description: mod_status output is public. It leaks requested URLs, client IPs and vhost layout.
+  tags: [apache, exposure, misconfig]
+requests:
+  - method: GET
+    path:
+      - "/server-status"
+    redirects: false
+    matchers:
+      - type: status
+        status: [200]
+      - type: word
+        words: ["Apache Server Status", "Server uptime"]
+        condition: or

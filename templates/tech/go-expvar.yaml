@@ -1,0 +1,18 @@
+id: go-expvar-exposure
+info:
+  name: Go expvar / pprof exposed
+  severity: medium
+  description: /debug/vars or pprof endpoints leak runtime internals and allow CPU/memory profiling of the process.
+  tags: [golang, debug, exposure]
+requests:
+  - method: GET
+    path:
+      - "/debug/vars"
+      - "/debug/pprof/"
+    redirects: false
+    matchers:
+      - type: status
+        status: [200]
+      - type: word
+        words: ["\"cmdline\"", "\"memstats\"", "Types of profiles available"]
+        condition: or

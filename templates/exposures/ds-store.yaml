@@ -1,0 +1,17 @@
+id: ds-store-exposure
+info:
+  name: Exposed .DS_Store
+  severity: low
+  description: A macOS .DS_Store file leaks the directory's file listing, including hidden files.
+  tags: [exposure, files]
+requests:
+  - method: GET
+    path:
+      - "/.DS_Store"
+    redirects: false
+    matchers:
+      - type: status
+        status: [200]
+      - type: binary
+        binary: ["0000000142756420"]
+        part: body

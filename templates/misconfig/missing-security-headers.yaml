@@ -1,0 +1,18 @@
+id: missing-security-headers
+info:
+  name: Missing security headers
+  severity: info
+  description: HSTS, Content-Security-Policy or X-Frame-Options are absent from the response.
+  tags: [headers, misconfig, hygiene]
+requests:
+  - method: GET
+    path:
+      - "/"
+    matchers:
+      - type: status
+        status: [200]
+      - type: word
+        part: header
+        words: ["strict-transport-security", "content-security-policy", "x-frame-options"]
+        condition: or
+        negative: true

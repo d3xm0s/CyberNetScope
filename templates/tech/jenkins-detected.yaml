@@ -1,0 +1,20 @@
+id: jenkins-detected
+info:
+  name: Jenkins CI detected
+  severity: info
+  description: Jenkins banner found. Check /script console and /asynchPeople for anonymous access next.
+  tags: [jenkins, ci, panel]
+requests:
+  - method: GET
+    path:
+      - "/"
+    redirects: false
+    matchers:
+      - type: word
+        part: header
+        words: ["x-jenkins:"]
+    extractors:
+      - type: regex
+        part: header
+        regex: ["(?i)x-jenkins:\\s*([0-9.]+)"]
+        group: 1

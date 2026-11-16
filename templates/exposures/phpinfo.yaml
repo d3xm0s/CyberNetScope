@@ -1,0 +1,23 @@
+id: phpinfo-exposure
+info:
+  name: Exposed phpinfo()
+  severity: medium
+  description: A phpinfo() page discloses PHP version, modules, paths and environment variables.
+  tags: [php, exposure, config]
+requests:
+  - method: GET
+    path:
+      - "/phpinfo.php"
+      - "/info.php"
+      - "/test.php?phpinfo=1"
+    redirects: false
+    matchers:
+      - type: status
+        status: [200]
+      - type: word
+        words: ["<title>phpinfo()</title>", "PHP Version"]
+        condition: or
+    extractors:
+      - type: regex
+        regex: ["PHP Version </td><td[^>]*>([^<]+)"]
+        group: 1

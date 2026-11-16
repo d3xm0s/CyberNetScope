@@ -1,0 +1,20 @@
+id: prometheus-metrics-exposure
+info:
+  name: Prometheus metrics exposed
+  severity: medium
+  description: /metrics is public. Metric labels routinely leak internal hostnames, job names and build info.
+  tags: [prometheus, monitoring, exposure]
+requests:
+  - method: GET
+    path:
+      - "/metrics"
+    redirects: false
+    matchers:
+      - type: status
+        status: [200]
+      - type: regex
+        regex: ["^# (HELP|TYPE) [a-zA-Z_:][a-zA-Z0-9_:]*"]
+    extractors:
+      - type: regex
+        regex: ["^# TYPE ([a-zA-Z_:][a-zA-Z0-9_:]*)"]
+        group: 1
